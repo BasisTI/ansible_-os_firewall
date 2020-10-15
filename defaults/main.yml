@@ -1,0 +1,4 @@
+---
+# defaults file for os_firewall
+os_firewall_enabled: True
+os_firewall_use_firewalld: False

@@ -1,0 +1,13 @@
+---
+# tasks file for os_firewall
+- name: Include firewalld tasks
+  include_tasks: firewalld.yml
+  when:
+    - os_firewall_enabled | bool
+    - os_firewall_use_firewalld | bool
+
+- name: Include iptables tasks
+  include_tasks: iptables.yml
+  when:
+    - os_firewall_enabled | bool
+    - not os_firewall_use_firewalld | bool
