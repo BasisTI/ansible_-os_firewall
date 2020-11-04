@@ -3,8 +3,8 @@
   systemd:
     name: firewalld
     state: stopped
-    enabled: no
-    masked: yes
+    enabled: False
+    masked: True
   register: task_result
   failed_when:
     - task_result is failed
@@ -19,18 +19,20 @@
   package:
     name:
       - iptables
-      - iptables-services
+      - iptables-service
     state: present
   register: result
   until: result is succeeded
+  when: ansible_os_family == 'RedHat'
 
 - name: Start and enable iptables service
   systemd:
     name: iptables
     state: started
-    enabled: yes
-    masked: no
+    enabled: True
+    masked: False
     daemon_reload: yes
+  when: ansible_os_family == 'RedHat'
   register: result
 
 - name: need to pause here, otherwise the iptables service starting can sometimes cause ssh to fail
