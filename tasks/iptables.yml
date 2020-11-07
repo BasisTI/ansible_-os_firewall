@@ -19,7 +19,7 @@
   package:
     name:
       - iptables
-      - iptables-service
+      - iptables-services
     state: present
   register: result
   until: result is succeeded
