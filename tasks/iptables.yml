@@ -27,7 +27,9 @@
   
 - name: Install iptables packages
   package:
-    name: iptables-persistent
+    name:
+      - iptables
+      - iptables-persistent
     state: present
   register: result
   until: result is succeeded
