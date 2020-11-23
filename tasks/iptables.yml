@@ -24,6 +24,14 @@
   register: result
   until: result is succeeded
   when: ansible_os_family == 'RedHat'
+  
+- name: Install iptables packages
+  package:
+    name: iptables-persistent
+    state: present
+  register: result
+  until: result is succeeded
+  when: ansible_os_family == 'Debian'
 
 - name: Start and enable iptables service
   systemd:
@@ -32,7 +40,6 @@
     enabled: True
     masked: False
     daemon_reload: yes
-  when: ansible_os_family == 'RedHat'
   register: result
 
 - name: need to pause here, otherwise the iptables service starting can sometimes cause ssh to fail
