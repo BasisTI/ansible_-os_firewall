@@ -33,9 +33,29 @@
     state: present
   register: result
   until: result is succeeded
-  when: ansible_os_family == 'Debian'
+  when: ansible_os_family == 'Debian' and ansible_distribution != 'Ubuntu' 
+
+- name: Install IFW Ubuntu packages
+  package:
+    name:
+      - ufw
+    state: present
+  register: result
+  until: result is succeeded
+  when: ansible_os_family == 'Ubuntu'
+
 
 - name: Start and enable iptables service
+  systemd:
+    name:  iptables
+    state: started
+    enabled: True
+    masked: False
+    daemon_reload: yes
+  register: result
+  when: ansible_os_family == 'Debian' and ansible_distribution != 'Ubuntu' 
+
+- name: Start and enable UFW service
   systemd:
     name:  ufw
     state: started
@@ -43,6 +63,8 @@
     masked: False
     daemon_reload: yes
   register: result
+  when: ansible_distribution == 'Ubuntu' 
+
 - name: need to pause here, otherwise the iptables service starting can sometimes cause ssh to fail
   pause:
     seconds: 10
